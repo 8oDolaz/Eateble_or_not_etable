@@ -6,14 +6,22 @@ mixer.init()
 time.set_timer(USEREVENT, 3000)
 WS = WL, WH = 1280, 720
 sc = display.set_mode(WS)
-models = 'toilet_paper.png', 'car_black_2.png', 'car_black_3.png', 'apple.png'
+models = 'images/peach.png', 'images/strawberry.png', 'images/pineapple.png', 'images/melon.png', 'images/banana.png',\
+         'images/lemon.png', 'images/grape.png', 'images/toilet_paper.png', 'images/car_black_2.png',\
+         'images/car_black_3.png', 'images/car_black_1.png', 'images/apple.png'
+
+eatable = ['images/peach.png', 'images/strawberry.png', 'images/pineapple.png', 'images/melon.png', 'images/banana.png',
+           'images/lemon.png', 'images/grape.png', 'images/apple.png']
+
+n_eatable = ['images/toilet_paper.png', 'images/car_black_2.png', 'images/car_black_3.png']
+
 enemy_surf = []
 display.set_caption('Edible or not edible')
 white, black, red, blue = (255, 255, 255), (0, 0, 0), (255, 0, 0), (0, 0, 255)
 neat = sprite.Group()
 eat = sprite.Group()
 player = sprite.Group()
-background = image.load('background.jpg').convert()
+background = image.load('images/background.jpg').convert()
 background = transform.scale(background, WS)
 back_sound = mixer.music.load('background_sound.mp3')
 mixer.music.play(-1)
@@ -37,15 +45,16 @@ class Enemy(sprite.Sprite):
         self.filename = models[randint(0, 3)]
         self.image = image.load(self.filename).convert_alpha()
 
-        if self.filename == 'car_black_3.png' or 'car_black_2.png':
+        if self.filename in n_eatable:
             self.image = transform.scale(self.image, (71, 131))
             self.add(neat)
-        if self.filename == 'toilet_paper.png' or self.filename == 'apple.png':
-            if self.filename == 'toilet_paper.png':
+        if self.filename in eatable:
+            if self.filename == 'images/toilet_paper.png':
                 self.image = transform.scale(self.image, (71, 71))
             self.add(eat)
         
         self.image = transform.rotate(self.image, self.turn)
+        self.image = transform.scale(self.image, (150, 150))
         self.rect = self.image.get_rect(center=(self.x, -131))
         self.speed = randint(1, 7)
 
@@ -63,7 +72,7 @@ class Player(sprite.Sprite):
     def __init__(self):
         sprite.Sprite.__init__(self)
         self.add(player)
-        self.image = image.load('character.png').convert_alpha()
+        self.image = image.load('images/character.png').convert_alpha()
         self.image = transform.scale(self.image, (200, 185))
         self.rect = self.image.get_rect(center=(WL / 2, WH - (WH / 8)))
         self.score = 0
